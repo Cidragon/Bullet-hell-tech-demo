@@ -34,6 +34,4 @@ func _on_timer_timeout() -> void:
 		queue_free()
 
 func die() -> void:
-	Global.bullet_count -= 1
-	
-	queue_free()
+	_on_timer_timeout()
