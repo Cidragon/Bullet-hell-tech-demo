@@ -1,8 +1,28 @@
-[gd_scene load_steps=2 format=3 uid="uid://1w1fi482knp"]
+[gd_scene load_steps=4 format=3 uid="uid://1w1fi482knp"]
 
 [ext_resource type="PackedScene" uid="uid://0368wj8usnug" path="res://scenes/player/player.tscn" id="1_t7ea3"]
+[ext_resource type="Script" path="res://scenes/main/fps.gd" id="2_cxthw"]
+[ext_resource type="Script" path="res://scenes/main/bullet_count.gd" id="2_j6uy7"]
 
 [node name="Main" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_t7ea3")]
-position = Vector2(571, 296)
+position = Vector2(933, 546)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="bullet_count" type="Label" parent="CanvasLayer"]
+offset_left = 1800.0
+offset_top = 50.0
+offset_right = 1908.0
+offset_bottom = 73.0
+text = "Bullets: 10000"
+script = ExtResource("2_j6uy7")
+
+[node name="fps" type="Label" parent="CanvasLayer"]
+offset_left = 1800.0
+offset_top = 25.0
+offset_right = 1864.0
+offset_bottom = 48.0
+text = "FPS: 120"
+script = ExtResource("2_cxthw")
