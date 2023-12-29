@@ -1,13 +1,16 @@
 extends CharacterBody2D
+class_name  Player
 
 const speed : int = 400
-const radius : int = 10
-const BULLET_AMOUNT : int = 180
+const radius : int = 80
+const BULLET_AMOUNT : int = 360
 
 @export var bullet_scene : PackedScene
+@onready var rotator: Node2D = %rotator
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	Global.player = self
 	pass # Replace with function body.
 
 
@@ -39,23 +42,24 @@ func player_movement() -> void:
 	velocity = current_speed
 	move_and_slide()
 
+var theta : float = 0.0
+@export_range(0, 2*PI) var alpha : float = 0.0
+
+func get_vector(angle : float) -> Vector2:
+	theta = angle + alpha
+	return Vector2(cos(theta), sin(theta))
 
 func _on_timer_timeout() -> void:
-	if Global.bullet_count <= 10000:
+	if Engine.get_frames_per_second() >= 100:
 		shot_full_circle()
 	if Input.is_action_pressed("shoot"):
 		shot_full_circle()
 
-func shot_full_circle() -> void:
+func shot_full_circle(angle : int = 0) -> void:
 	var step = 2 * PI / BULLET_AMOUNT
 	
 	for i : int in range(BULLET_AMOUNT):
-		var new_bullet = bullet_scene.instantiate()
-		new_bullet.position = position + Vector2(radius, 0).rotated(step * i)
-		new_bullet.rotation = Vector2(radius, 0).rotated(step * i).angle()
-		print(new_bullet.rotation)
-		#new_bullet.player_position = position
-		
-		#new_bullet.init_position = position + Vector2(0, i)
-		
-		get_parent().add_child(new_bullet)
+		var bullet = Global.bullet_pool.pop_back()
+		bullet.position = position + Vector2(radius, 0).rotated(step * i)
+		bullet.direction = Vector2(cos(step * i), sin(step * i))
+		get_tree().get_root().add_child(bullet)
