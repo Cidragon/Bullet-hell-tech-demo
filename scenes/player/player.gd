@@ -3,13 +3,25 @@ class_name  Player
 
 const speed : int = 400
 const radius : int = 80
-const BULLET_AMOUNT : int = 1
+const BULLET_AMOUNT : int = 90
 
 @export var bullet_scene : PackedScene
 @onready var rotator: Node2D = %rotator
 
+var is_spiral_reversed : bool = false
+var current_shot : int
+
+enum SHOT_TYPE {
+	CIRCLE,
+	SPIRAL_ONE,
+	SPIRAL_TWO,
+	SPIRAL_FOUR
+}
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	current_shot = SHOT_TYPE.CIRCLE
 	Global.player = self
 	
 	pass # Replace with function body.
@@ -52,7 +64,15 @@ func get_vector(angle : float) -> Vector2:
 
 func _on_timer_timeout() -> void:
 	if Engine.get_frames_per_second() >= 100:
-		shot_four_spiral()
+		match current_shot:
+			SHOT_TYPE.CIRCLE:
+				shot_full_circle()
+			SHOT_TYPE.SPIRAL_ONE:
+				shot_once_spiral(is_spiral_reversed)
+			SHOT_TYPE.SPIRAL_TWO:
+				shot_twice_spiral(is_spiral_reversed)
+			SHOT_TYPE.SPIRAL_FOUR:
+				shot_four_spiral(is_spiral_reversed)
 	if Input.is_action_pressed("shoot"):
 		shot_full_circle()
 
@@ -61,41 +81,51 @@ func shot_full_circle(angle : int = 0) -> void:
 	
 	for i : int in range(BULLET_AMOUNT):
 		var bullet = Global.bullet_pool.pop_back()
-		bullet.position = position + Vector2(radius, 0).rotated(step * i)
+		bullet.position = position #Vector2(radius, 0).rotated(step * i)
 		bullet.direction = Vector2(cos(step * i), sin(step * i))
 		get_tree().get_root().add_child(bullet)
 
 var angle : float = 0.0
 
-func shot_once_spiral() -> void:
-	for i : int in range(BULLET_AMOUNT):
-		var bullet = Global.bullet_pool.pop_back()
-		bullet.position = position
+func shot_once_spiral(is_reversed = false) -> void:
+	var bullet = Global.bullet_pool.pop_back()
+	bullet.position = position
+	if is_reversed:
+		bullet.direction = Vector2.RIGHT.rotated(-angle)
+	else:
 		bullet.direction = Vector2.RIGHT.rotated(angle)
-		angle += 0.25
-		get_tree().get_root().add_child(bullet)
+		
+	angle += 0.25
+	get_tree().get_root().add_child(bullet)
 
-func shot_twice_spiral() -> void:
-	for i : int in range(BULLET_AMOUNT):
-		var bullet = Global.bullet_pool.pop_back()
-		var bullet2 = Global.bullet_pool.pop_back()
-		
-		bullet.position = position
+func shot_twice_spiral(is_reversed = false) -> void:
+	var bullet = Global.bullet_pool.pop_back()
+	var bullet2 = Global.bullet_pool.pop_back()
+	
+	bullet.position = position
+	bullet2.position = position
+	
+	if is_reversed:
+		bullet.direction = Vector2.RIGHT.rotated(-angle)
+		bullet2.direction = Vector2.RIGHT.rotated(-angle + PI)
+	else:
 		bullet.direction = Vector2.RIGHT.rotated(angle)
-		bullet2.position = position
-		bullet2.direction = Vector2.RIGHT.rotated(angle + 180)
+		bullet2.direction = Vector2.RIGHT.rotated(angle + PI)
 		
-		angle += 0.25
+	
+	angle += 0.25
+	get_tree().get_root().add_child(bullet)
+	get_tree().get_root().add_child(bullet2)
+		
+func shot_four_spiral(is_reversed = false) -> void:
+	for i in range(4):
+		var bullet = Global.bullet_pool.pop_back()
+		bullet.position = position
+		if is_reversed:
+			bullet.direction = Vector2.RIGHT.rotated(PI/2*i - angle)
+		else:
+			bullet.direction = Vector2.RIGHT.rotated(PI/2*i + angle)
+		
 		get_tree().get_root().add_child(bullet)
-		get_tree().get_root().add_child(bullet2)
 		
-func shot_four_spiral() -> void:
-	for i : int in range(BULLET_AMOUNT):
-		for j in range(4):
-			var bullet = Global.bullet_pool.pop_back()
-			bullet.position = position
-			bullet.direction = Vector2.RIGHT.rotated(PI/2*j + angle)
-			#print(bullet.direction)
-			get_tree().get_root().add_child(bullet)
-			
-		angle += 0.25
+	angle += 0.25

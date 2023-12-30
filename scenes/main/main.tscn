@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://1w1fi482knp"]
+[gd_scene load_steps=8 format=3 uid="uid://1w1fi482knp"]
 
 [ext_resource type="Script" path="res://scenes/main/main.gd" id="1_aamnx"]
 [ext_resource type="PackedScene" uid="uid://0368wj8usnug" path="res://scenes/player/player.tscn" id="1_t7ea3"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scenes/main/fps.gd" id="2_cxthw"]
 [ext_resource type="Script" path="res://scenes/main/bullet_count.gd" id="2_j6uy7"]
 [ext_resource type="PackedScene" uid="uid://5s6emwggv5w7" path="res://scenes/wall/wall.tscn" id="6_aeg3k"]
+[ext_resource type="PackedScene" uid="uid://ciqc7xsn47vwv" path="res://scenes/ui/ui.tscn" id="7_qsgia"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_aamnx")
@@ -50,3 +51,9 @@ monitorable = false
 position = Vector2(946, 1010)
 rotation = 1.5708
 monitorable = false
+
+[node name="UI" parent="." instance=ExtResource("7_qsgia")]
+offset_left = 1800.0
+offset_top = 128.0
+offset_right = 1800.0
+offset_bottom = 128.0

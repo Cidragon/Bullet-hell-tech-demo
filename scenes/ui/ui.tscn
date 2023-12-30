@@ -1,0 +1,84 @@
+[gd_scene load_steps=2 format=3 uid="uid://ciqc7xsn47vwv"]
+
+[ext_resource type="Script" path="res://scenes/ui/ui.gd" id="1_ba45u"]
+
+[node name="UI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ba45u")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 353.0
+offset_bottom = 497.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+text = "circle: "
+
+[node name="circle" type="CheckBox" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+text = "spiral: "
+
+[node name="spiral" type="CheckBox" parent="VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+text = "2 spiral: "
+
+[node name="double_spiral" type="CheckBox" parent="VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer4"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+text = "4 spiral: "
+
+[node name="four_spiral" type="CheckBox" parent="VBoxContainer/HBoxContainer4"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer/HBoxContainer5"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+text = "reversed:"
+
+[node name="reversed" type="CheckBox" parent="VBoxContainer/HBoxContainer5"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[connection signal="button_up" from="VBoxContainer/HBoxContainer/circle" to="." method="_on_circle_button_up"]
+[connection signal="button_up" from="VBoxContainer/HBoxContainer2/spiral" to="." method="_on_spiral_button_up"]
+[connection signal="button_up" from="VBoxContainer/HBoxContainer3/double_spiral" to="." method="_on_double_spiral_button_up"]
+[connection signal="button_up" from="VBoxContainer/HBoxContainer4/four_spiral" to="." method="_on_four_spiral_button_up"]
+[connection signal="button_up" from="VBoxContainer/HBoxContainer5/reversed" to="." method="_on_reversed_button_up"]
