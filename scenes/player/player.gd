@@ -3,7 +3,7 @@ class_name  Player
 
 const speed : int = 400
 const radius : int = 80
-const BULLET_AMOUNT : int = 360
+const BULLET_AMOUNT : int = 1
 
 @export var bullet_scene : PackedScene
 @onready var rotator: Node2D = %rotator
@@ -11,6 +11,7 @@ const BULLET_AMOUNT : int = 360
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Global.player = self
+	
 	pass # Replace with function body.
 
 
@@ -51,7 +52,7 @@ func get_vector(angle : float) -> Vector2:
 
 func _on_timer_timeout() -> void:
 	if Engine.get_frames_per_second() >= 100:
-		shot_full_circle()
+		shot_four_spiral()
 	if Input.is_action_pressed("shoot"):
 		shot_full_circle()
 
@@ -63,3 +64,38 @@ func shot_full_circle(angle : int = 0) -> void:
 		bullet.position = position + Vector2(radius, 0).rotated(step * i)
 		bullet.direction = Vector2(cos(step * i), sin(step * i))
 		get_tree().get_root().add_child(bullet)
+
+var angle : float = 0.0
+
+func shot_once_spiral() -> void:
+	for i : int in range(BULLET_AMOUNT):
+		var bullet = Global.bullet_pool.pop_back()
+		bullet.position = position
+		bullet.direction = Vector2.RIGHT.rotated(angle)
+		angle += 0.25
+		get_tree().get_root().add_child(bullet)
+
+func shot_twice_spiral() -> void:
+	for i : int in range(BULLET_AMOUNT):
+		var bullet = Global.bullet_pool.pop_back()
+		var bullet2 = Global.bullet_pool.pop_back()
+		
+		bullet.position = position
+		bullet.direction = Vector2.RIGHT.rotated(angle)
+		bullet2.position = position
+		bullet2.direction = Vector2.RIGHT.rotated(angle + 180)
+		
+		angle += 0.25
+		get_tree().get_root().add_child(bullet)
+		get_tree().get_root().add_child(bullet2)
+		
+func shot_four_spiral() -> void:
+	for i : int in range(BULLET_AMOUNT):
+		for j in range(4):
+			var bullet = Global.bullet_pool.pop_back()
+			bullet.position = position
+			bullet.direction = Vector2.RIGHT.rotated(PI/2*j + angle)
+			#print(bullet.direction)
+			get_tree().get_root().add_child(bullet)
+			
+		angle += 0.25

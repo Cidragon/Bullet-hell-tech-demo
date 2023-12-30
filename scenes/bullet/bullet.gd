@@ -4,7 +4,7 @@ class_name Bullet
 
 const speed : int = 150
 const max_timer : float = 10.0
-var direction : Vector2
+var direction : Vector2 = Vector2.RIGHT
 var timer : float = 0.0
 
 func _enter_tree() -> void:

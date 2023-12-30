@@ -35,22 +35,18 @@ script = ExtResource("2_cxthw")
 
 [node name="wall" parent="." instance=ExtResource("6_aeg3k")]
 position = Vector2(53, 545)
-monitoring = false
 monitorable = false
 
 [node name="wall2" parent="." instance=ExtResource("6_aeg3k")]
 position = Vector2(1851, 532)
-monitoring = false
 monitorable = false
 
 [node name="wall3" parent="." instance=ExtResource("6_aeg3k")]
 position = Vector2(932, 66)
 rotation = 1.5708
-monitoring = false
 monitorable = false
 
 [node name="wall4" parent="." instance=ExtResource("6_aeg3k")]
 position = Vector2(946, 1010)
 rotation = 1.5708
-monitoring = false
 monitorable = false
